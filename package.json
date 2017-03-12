@@ -1,0 +1,23 @@
+{
+  "name": "localeyes",
+  "version": "1.0.0",
+  "description": "A simple localization library.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trenskow/localeyes.git"
+  },
+  "keywords": [
+    "localize",
+    "string"
+  ],
+  "author": "Kristian Trenskow <trenskow@me.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/trenskow/localeyes/issues"
+  },
+  "homepage": "https://github.com/trenskow/localeyes#readme"
+}
