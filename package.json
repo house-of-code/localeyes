@@ -1,10 +1,10 @@
 {
   "name": "localeyes",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A simple localization library.",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "./node_modules/mocha/bin/mocha test/index.js"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,12 @@
   "bugs": {
     "url": "https://github.com/trenskow/localeyes/issues"
   },
-  "homepage": "https://github.com/trenskow/localeyes#readme"
+  "homepage": "https://github.com/trenskow/localeyes#readme",
+  "dependencies": {
+    "keyd": "^1.0.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
 }
