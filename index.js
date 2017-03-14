@@ -59,9 +59,11 @@ module.exports = exports = function LocalEyes(locales, options) {
 	}
 
 	this.all = function(keypath, ...args) {
-		return Object.keys(this.locales).map(locale => {
-			return this.lang(locale).get(keypath, ...args);
-		});
+		return Object.keys(this.locales).reduce((result, language) => {
+			let ret = result;
+			ret[language] = this.lang(language).get(keypath, ...args);
+			return ret;
+		}, {});
 	};
 
 	this.languages = Object.keys(this.locales);

@@ -58,3 +58,9 @@ it ('should come back with default language if language not found', () => {
 it ('should come back with keypath if string is not found', () => {
 	expect(localeyes().lang('en').get('non.existing.key')).to.equal('non.existing.key');
 });
+
+it ('should come back with all languages', () => {
+	let res = localeyes().all('my.localized.key', 'cool');
+	expect(res).to.be.an('object').with.property('en').to.equal('This is a very cool test!');
+	expect(res).to.be.an('object').with.property('da').to.equal('Dette er en meget sej test!');
+});
