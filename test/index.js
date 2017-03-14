@@ -47,6 +47,11 @@ it ('should come back with already configured instance of LocalEyes', () => {
 	expect(localize.languages).to.be.an('Array').of.length(2);
 });
 
+it ('should come back with languages', () => {
+	expect(localeyes().lang('en').language).to.equal('en');
+	expect(localeyes().lang('da').language).to.equal('da');
+});
+
 it ('should come back with string translated to danish', () => {
 	expect(localeyes().lang('da').get('my.localized.key', 'cool')).to.equal('Dette er en meget sej test!');
 });

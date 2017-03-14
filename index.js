@@ -17,6 +17,10 @@ module.exports = exports = function LocalEyes(locales, options) {
 	this.locales = locales;
 	this.defaultLanguage = options.defaultLanguage || Object.keys(locales)[0];
 
+	Object.keys(this.locales).forEach((language) => {
+		this.locales[language]._identifier = language;
+	});
+
 	configured = this;
 
 	this._locale = (accepts) => {
@@ -47,15 +51,14 @@ module.exports = exports = function LocalEyes(locales, options) {
 				return res;
 
 			},
-			strings: locale.strings
+			strings: locale.strings,
+			language: locale._identifier
 		};
 
 	};
 
 	if (typeof window !== 'undefined') {
-		this.browser = () => {
-			return this.lang(navigator.language || navigator.userLanguage);
-		};
+		this.browser = this.lang(navigator.language || navigator.userLanguage);
 	}
 
 	this.all = function(keypath, ...args) {
