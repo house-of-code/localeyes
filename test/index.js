@@ -8,13 +8,15 @@ const locales = {
 		strings: {
 			my: {
 				localized: {
-					key: 'This is a ${cool:0:very} test!'
+					key: '${cap:0} is a ${1} cool test!'
 				}
-			}
+			},
+			this: 'this',
+			very: 'very'
 		},
 		transforms: {
-			cool: (val, arg) => {
-				return `${arg} ${val}`;
+			cap: (val) => {
+				return val.substr(0,1).toUpperCase() + val.substr(1);
 			}
 		}
 	},
@@ -22,14 +24,15 @@ const locales = {
 		strings: {
 			my: {
 				localized: {
-					key: 'Dette er en ${sej:0:meget} test!'
+					key: '${cap:0} er en ${1} sej test!'
 				}
-			}
+			},
+			this: 'dette',
+			very: 'meget'
 		},
 		transforms: {
-			sej: (val, arg) => {
-				if (val == 'cool') val = 'sej';
-				return `${arg} ${val}`;
+			cap: (val) => {
+				return val.substr(0,1).toUpperCase() + val.substr(1);
 			}
 		}
 	}
@@ -53,11 +56,11 @@ it ('should come back with languages', () => {
 });
 
 it ('should come back with string translated to danish', () => {
-	expect(localeyes().lang('da').get('my.localized.key', 'cool')).to.equal('Dette er en meget sej test!');
+	expect(localeyes().lang('da').get('my.localized.key', 'this', 'very')).to.equal('Dette er en meget sej test!');
 });
 
 it ('should come back with default language if language not found', () => {
-	expect(localeyes().lang('se').get('my.localized.key', 'cool')).to.equal('This is a very cool test!');
+	expect(localeyes().lang('se').get('my.localized.key', 'this', 'very')).to.equal('This is a very cool test!');
 });
 
 it ('should come back with keypath if string is not found', () => {
@@ -65,7 +68,7 @@ it ('should come back with keypath if string is not found', () => {
 });
 
 it ('should come back with all languages', () => {
-	let res = localeyes().all('my.localized.key', 'cool');
+	let res = localeyes().all('my.localized.key', 'this', 'very');
 	expect(res).to.be.an('object').with.property('en').to.equal('This is a very cool test!');
 	expect(res).to.be.an('object').with.property('da').to.equal('Dette er en meget sej test!');
 });

@@ -34,23 +34,31 @@ module.exports = exports = function LocalEyes(locales, options) {
 
 		const locale = this._locale(accepts);
 
+		let get = (keypath, ...args) => {
+
+			let res = keyd(locale.strings).get(keypath);
+
+			if (!res) return keypath;
+
+			if (args.length === 1 && typeof args[0] === 'object') {
+				args = args[0];
+			}
+
+			let m;
+
+			while (typeof res.match === 'function' && (m = res.match(/\${(?:([a-z]+):)?([0-9]+)(?::(.+))?}/i))) {
+				let [r,t,i,p] = m;
+				i = args[i];
+				if (i && typeof i === 'string') i = get(i);
+				res = res.replace(r, (t ? locale.transforms[t](i, p) : i));
+			}
+
+			return res;
+
+		};
+
 		return {
-			get: (keypath, ...args) => {
-
-				let res = keyd(locale.strings).get(keypath);
-
-				if (!res) return keypath;
-
-				let m;
-
-				while (typeof res.match === 'function' && (m = res.match(/\${(?:([a-z]+):)?([0-9]+)(?::(.+))?}/i))) {
-					let [r,t,i,p] = m;
-					res = res.replace(r, (t ? locale.transforms[t](args[i], p) : args[i]));
-				}
-
-				return res;
-
-			},
+			get: get,
 			strings: locale.strings,
 			language: locale._identifier
 		};
