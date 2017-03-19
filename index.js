@@ -40,7 +40,7 @@ module.exports = exports = function LocalEyes(locales, options) {
 
 			if (!res) return keypath;
 
-			if (args.length === 1 && typeof args[0] === 'object') {
+			if (args.length === 1 && typeof args[0] === 'object' && !Array.isArray(args[0])) {
 				args = args[0];
 			}
 
