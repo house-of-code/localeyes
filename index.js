@@ -46,7 +46,7 @@ module.exports = exports = function LocalEyes(locales, options) {
 
 			let m;
 
-			while (typeof res.match === 'function' && (m = res.match(/\${(?:([a-z]+):)?([0-9]+)(?::(.+))?}/i))) {
+			while (typeof res.match === 'function' && (m = res.match(/\${(?:([a-z]+):)?([0-9a-z_\-]+)(?::(.+))?}/i))) {
 				let [r,t,i,p] = m;
 				i = args[i];
 				if (i && typeof i === 'string') i = get(i);
