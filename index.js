@@ -14,31 +14,36 @@ module.exports = exports = function LocalEyes(locales, options) {
 
 	options = options || {};
 
-	this.locales = locales;
-	this.defaultLanguage = options.defaultLanguage || Object.keys(locales)[0];
+	let _locales = locales;
+	const _defaultLanguage = options.defaultLanguage || Object.keys(locales)[0];
 
-	Object.keys(this.locales).forEach((language) => {
-		this.locales[language]._identifier = language;
+	Object.keys(_locales).forEach((language) => {
+		_locales[language]._identifier = language;
 	});
 
 	configured = this;
 
-	this._locale = (accepts) => {
+	const _locale = (accepts) => {
 		return (accepts || '')
 			.split(/, ?/)
-			.map((accept) => this.locales[accept.split(/; ?/)[0]] )
-			.filter(locale => locale)[0] || this.locales[this.defaultLanguage];
+			.map((accept) => _locales[accept.split(/; ?/)[0]] )
+			.filter(locale => locale)[0] || _locales[_defaultLanguage];
 	};
 
-	this.lang = (accepts) => {
+	function Locale(accepts) {
 
-		const locale = this._locale(accepts);
+		if (!(this instanceof Locale)) return new Locale(accepts);
 
-		let get = (keypath, ...args) => {
+		const locale = _locale(accepts);
+
+		this.get = (keypath, ...args) => {
 
 			let res = keyd(locale.strings).get(keypath);
 
-			if (typeof res === 'undefined') return keypath;
+			if (typeof res === 'undefined') {
+				if (typeof this.defaultValue === 'undefined') return keypath;
+				return this.defaultValue;
+			}
 
 			if (args.length === 1 && typeof args[0] === 'object' && !Array.isArray(args[0])) {
 				args = args[0];
@@ -49,7 +54,7 @@ module.exports = exports = function LocalEyes(locales, options) {
 			while (typeof res.match === 'function' && (m = res.match(/\${(?:([a-z]+):)?([0-9a-z_\-]+)(?::(.+))?}/i))) {
 				let [r,t,i,p] = m;
 				i = args[i];
-				if (i && typeof i === 'string') i = get(i);
+				if (i && typeof i === 'string') i = this.get(i);
 				res = res.replace(r, (t ? locale.transforms[t](i, p) : i));
 			}
 
@@ -57,27 +62,31 @@ module.exports = exports = function LocalEyes(locales, options) {
 
 		};
 
-		return {
-			get: get,
-			strings: locale.strings,
-			language: locale._identifier
+		this.string = locale.strings;
+		this.language = locale._identifier;
+
+		this.default = (value) => {
+			this.defaultValue = value;
+			return this;
 		};
 
-	};
+	}
+
+	this.lang = Locale;
 
 	if (typeof window !== 'undefined') {
 		this.browser = this.lang(navigator.language || navigator.userLanguage);
 	}
 
 	this.all = function(keypath, ...args) {
-		return Object.keys(this.locales).reduce((result, language) => {
+		return Object.keys(_locales).reduce((result, language) => {
 			let ret = result;
 			ret[language] = this.lang(language).get(keypath, ...args);
 			return ret;
 		}, {});
 	};
 
-	this.languages = Object.keys(this.locales);
+	this.languages = Object.keys(_locales);
 
 	if (options.warnMissing) {
 
@@ -94,7 +103,7 @@ module.exports = exports = function LocalEyes(locales, options) {
 				.reduce((memo, item) => memo.concat(item), []);
 		};
 		Object.keys(locales).slice(1).forEach((locale) => {
-			let missing = scanNext(locales[locale].strings, locales[this.defaultLanguage].strings, []);
+			let missing = scanNext(locales[locale].strings, locales[_defaultLanguage].strings, []);
 			if (missing.length > 0) {
 				console.warn(`WARN: Missing translations for ${locale}:`);
 				missing.forEach((missing) => {
