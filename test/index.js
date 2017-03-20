@@ -77,6 +77,10 @@ it ('should come back with empty string if string is not found', () => {
 	expect(localeyes().lang('en').default('').get('non.existing.key')).to.equal('');
 });
 
+it ('should come back with default language', () => {
+	expect(localeyes().defaultLanguage).to.equal('en');
+});
+
 it ('should come back with all languages', () => {
 	let res = localeyes().all('my.localized.key', {
 		this: 'this',

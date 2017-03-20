@@ -17,6 +17,8 @@ module.exports = exports = function LocalEyes(locales, options) {
 	let _locales = locales;
 	const _defaultLanguage = options.defaultLanguage || Object.keys(locales)[0];
 
+	this.defaultLanguage = _defaultLanguage;
+
 	Object.keys(_locales).forEach((language) => {
 		_locales[language]._identifier = language;
 	});
