@@ -38,7 +38,7 @@ module.exports = exports = function LocalEyes(locales, options) {
 
 			let res = keyd(locale.strings).get(keypath);
 
-			if (!res) return keypath;
+			if (typeof res === 'undefined') return keypath;
 
 			if (args.length === 1 && typeof args[0] === 'object' && !Array.isArray(args[0])) {
 				args = args[0];
