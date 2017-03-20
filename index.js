@@ -64,7 +64,7 @@ module.exports = exports = function LocalEyes(locales, options) {
 
 		};
 
-		this.string = locale.strings;
+		this.strings = locale.strings;
 		this.language = locale._identifier;
 
 		this.default = (value) => {

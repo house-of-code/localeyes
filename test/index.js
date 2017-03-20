@@ -89,3 +89,11 @@ it ('should come back with all languages', () => {
 	expect(res).to.be.an('object').with.property('en').to.equal('This is a very cool test!');
 	expect(res).to.be.an('object').with.property('da').to.equal('Dette er en meget sej test!');
 });
+
+it ('should come back with all string', () => {
+	expect(localeyes().lang('en').strings)
+		.to.have.property('my')
+		.to.have.property('localized')
+		.to.have.property('key')
+		.equal('${cap:this} is a ${very} cool test!');
+});
