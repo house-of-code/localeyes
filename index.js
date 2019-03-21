@@ -77,7 +77,7 @@ module.exports = exports = function LocalEyes(locales, options) {
 	this.lang = Locale;
 
 	if (typeof window !== 'undefined') {
-		this.browser = this.lang(navigator.language || navigator.userLanguage);
+		this.browser = this.lang(navigator.language.substring(0, 2) || navigator.userLanguage);
 	}
 
 	this.all = function(keypath, ...args) {
