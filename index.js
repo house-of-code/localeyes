@@ -26,10 +26,14 @@ module.exports = exports = function LocalEyes(locales, options) {
 	configured = this;
 
 	const _locale = (accepts) => {
-		return (accepts || '')
-			.split(/, ?/)
-			.map((accept) => _locales[accept.split(/; ?/)[0]] )
-			.filter(locale => locale)[0] || _locales[_defaultLanguage];
+		let acc = (accepts || '').split(/,\s?/)
+			.map(langRange => {
+				const lang = langRange.split("-")[0].replace(/;.+?$/, "")
+				return _locales[lang]
+			})
+			.filter(l => !!l)
+
+		return acc.length > 0 ? acc[0] : _locales[_defaultLanguage]
 	};
 
 	function Locale(accepts) {
